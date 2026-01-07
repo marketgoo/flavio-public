@@ -1,0 +1,336 @@
+@import "./fonts.css";
+@import "tailwindcss";
+
+/* =============================================================================
+   Tailwind v4 Theme Configuration
+   ============================================================================= */
+@theme {
+	/* Font family */
+	--font-sans: "Montserrat", system-ui, sans-serif;
+
+	/* Custom font sizes for headings */
+	--text-h2: 1.875rem; /* 30px */
+
+	/* ============================================
+	 * PALETA DE COLORES - Basado en Tailwind v4
+	 * ============================================ */
+
+	/* Neutral */
+	--color-neutral-50: #fafafa;
+	--color-neutral-100: #f5f5f5;
+	--color-neutral-200: #e5e5e5;
+	--color-neutral-300: #d4d4d4;
+	--color-neutral-400: #a3a3a3;
+	--color-neutral-500: #737373;
+	--color-neutral-600: #525252;
+	--color-neutral-700: #404040;
+	--color-neutral-800: #262626;
+	--color-neutral-900: #171717;
+	--color-neutral-950: #0a0a0a;
+
+	/* Magenta */
+	--color-magenta-50: #fff3fc;
+	--color-magenta-100: #fee9f9;
+	--color-magenta-200: #f7cbed;
+	--color-magenta-300: #ff80df;
+	--color-magenta-400: #fa59d1;
+	--color-magenta-500: #f20cb8;
+	--color-magenta-600: #cf099d;
+	--color-magenta-700: #ad0784;
+	--color-magenta-800: #720256;
+	--color-magenta-900: #4c0039;
+	--color-magenta-950: #3d002e;
+
+	/* Lime */
+	--color-lime-50: #f5fff5;
+	--color-lime-100: #e9fae9;
+	--color-lime-200: #bcf0bc;
+	--color-lime-300: #90e690;
+	--color-lime-400: #4ddb4d;
+	--color-lime-500: #21cd21;
+	--color-lime-600: #1aa41a;
+	--color-lime-700: #147b14;
+	--color-lime-800: #0d520d;
+	--color-lime-900: #072907;
+	--color-lime-950: #042104;
+
+	/* Red */
+	--color-red-50: #fef2f2;
+	--color-red-100: #ffe2e2;
+	--color-red-200: #fecaca;
+	--color-red-300: #fca5a5;
+	--color-red-400: #f87171;
+	--color-red-500: #ef4444;
+	--color-red-600: #dc2626;
+	--color-red-700: #b91c1c;
+	--color-red-800: #991b1b;
+	--color-red-900: #7f1d1d;
+	--color-red-950: #450a0a;
+
+	/* Green */
+	--color-green-50: #f0fdf4;
+	--color-green-100: #dcfce7;
+	--color-green-200: #bbf7d0;
+	--color-green-300: #86efac;
+	--color-green-400: #4ade80;
+	--color-green-500: #22c55e;
+	--color-green-600: #16a34a;
+	--color-green-700: #15803d;
+	--color-green-800: #166534;
+	--color-green-900: #14532d;
+	--color-green-950: #052e16;
+
+	/* Amber */
+	--color-amber-50: #fffbeb;
+	--color-amber-100: #fef3c7;
+	--color-amber-200: #fde68a;
+	--color-amber-300: #fcd34d;
+	--color-amber-400: #fbbf24;
+	--color-amber-500: #f59e0b;
+	--color-amber-600: #d97706;
+	--color-amber-700: #b45309;
+	--color-amber-800: #92400e;
+	--color-amber-900: #78350f;
+	--color-amber-950: #451a03;
+
+	/* Blue */
+	--color-blue-50: #eff6ff;
+	--color-blue-100: #dbeafe;
+	--color-blue-200: #bfdbfe;
+	--color-blue-300: #93c5fd;
+	--color-blue-400: #60a5fa;
+	--color-blue-500: #3b82f6;
+	--color-blue-600: #2563eb;
+	--color-blue-700: #1d4ed8;
+	--color-blue-800: #1e40af;
+	--color-blue-900: #1e3a8a;
+	--color-blue-950: #172554;
+
+	/* ============================================
+	 * SHADOWS
+	 * ============================================ */
+	--shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--shadow-xs: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+	--shadow-sm: 0 2px 4px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+	--shadow-md:
+		0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--shadow-lg:
+		0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+	--shadow-xl:
+		0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+	--shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+	/* ============================================
+	 * SEMANTIC COLORS (shadcn/ui)
+	 * ============================================ */
+
+	/* Background y Foreground */
+	--color-background: var(--color-neutral-50);
+	--color-foreground: var(--color-neutral-950);
+
+	/* Card */
+	--color-card: #ffffff;
+	--color-card-foreground: var(--color-neutral-950);
+
+	/* Popover */
+	--color-popover: #ffffff;
+	--color-popover-foreground: var(--color-neutral-950);
+
+	/* Primary */
+	--color-primary: var(--color-neutral-900);
+	--color-primary-foreground: var(--color-neutral-50);
+
+	/* Secondary */
+	--color-secondary: var(--color-neutral-100);
+	--color-secondary-foreground: var(--color-neutral-900);
+
+	/* Muted */
+	--color-muted: var(--color-neutral-100);
+	--color-muted-foreground: var(--color-neutral-500);
+
+	/* Accent */
+	--color-accent: var(--color-neutral-100);
+	--color-accent-foreground: var(--color-neutral-900);
+
+	/* Destructive */
+	--color-destructive: var(--color-red-600);
+	--color-destructive-foreground: #ffffff;
+
+	/* Border y Input */
+	--color-border: var(--color-neutral-200);
+	--color-input: var(--color-neutral-200);
+
+	/* Ring */
+	--color-ring: var(--color-neutral-950);
+
+	/* Radius */
+	--radius: 0.5rem;
+	--radius-lg: var(--radius);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-sm: calc(var(--radius) - 4px);
+
+	/* Animation keyframes */
+	@keyframes accordion-down {
+		from {
+			height: 0;
+		}
+		to {
+			height: var(--radix-accordion-content-height);
+		}
+	}
+
+	@keyframes accordion-up {
+		from {
+			height: var(--radix-accordion-content-height);
+		}
+		to {
+			height: 0;
+		}
+	}
+
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/* =============================================================================
+   CSS Variables for light/dark mode (HSL for legacy component compatibility)
+   ============================================================================= */
+@layer base {
+	:root {
+		--background: 0 0% 98%; /* neutral-50 */
+		--foreground: 0 0% 4%; /* neutral-950 */
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 4%; /* neutral-950 */
+		--popover: 0 0% 100%;
+		--popover-foreground: 0 0% 4%; /* neutral-950 */
+		--primary: 0 0% 9%; /* neutral-900 */
+		--primary-foreground: 0 0% 98%; /* neutral-50 */
+		--secondary: 0 0% 96%; /* neutral-100 */
+		--secondary-foreground: 0 0% 9%; /* neutral-900 */
+		--muted: 0 0% 96%; /* neutral-100 */
+		--muted-foreground: 0 0% 45%; /* neutral-500 */
+		--accent: 0 0% 96%; /* neutral-100 */
+		--accent-foreground: 0 0% 9%; /* neutral-900 */
+		--destructive: 0 84% 60%; /* red-500 */
+		--destructive-foreground: 0 0% 100%;
+		--border: 0 0% 90%; /* neutral-200 */
+		--input: 0 0% 90%; /* neutral-200 */
+		--ring: 0 0% 4%; /* neutral-950 */
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 0 0% 4%; /* neutral-950 */
+		--foreground: 0 0% 98%; /* neutral-50 */
+		--card: 0 0% 9%; /* neutral-900 */
+		--card-foreground: 0 0% 98%; /* neutral-50 */
+		--popover: 0 0% 9%; /* neutral-900 */
+		--popover-foreground: 0 0% 98%; /* neutral-50 */
+		--primary: 0 0% 98%; /* neutral-50 */
+		--primary-foreground: 0 0% 9%; /* neutral-900 */
+		--secondary: 0 0% 15%; /* neutral-800 */
+		--secondary-foreground: 0 0% 98%; /* neutral-50 */
+		--muted: 0 0% 15%; /* neutral-800 */
+		--muted-foreground: 0 0% 64%; /* neutral-400 */
+		--accent: 0 0% 15%; /* neutral-800 */
+		--accent-foreground: 0 0% 98%; /* neutral-50 */
+		--destructive: 0 63% 31%; /* red-900 */
+		--destructive-foreground: 0 0% 98%; /* neutral-50 */
+		--border: 0 0% 15%; /* neutral-800 */
+		--input: 0 0% 15%; /* neutral-800 */
+		--ring: 0 0% 83%; /* neutral-300 */
+	}
+
+	* {
+		border-color: hsl(var(--border));
+	}
+
+	body,
+	#flavio {
+		@apply font-sans;
+		background-color: hsl(var(--background));
+		color: hsl(var(--foreground));
+	}
+}
+
+/* =============================================================================
+   Typography Classes - Synced with Figma (Obra Studio kit)
+   
+   Naming convention: {category}-{weight}
+   - paragraph: 16px (text-base)
+   - small: 14px (text-sm)
+   - label: 12px (text-xs)
+   
+   Usage: <p className="paragraph-regular">Text</p>
+   ============================================================================= */
+@layer components {
+	/* Paragraph - 16px */
+	.paragraph-regular {
+		@apply !text-base !font-normal;
+	}
+	.paragraph-medium {
+		@apply !text-base !font-medium;
+	}
+	.paragraph-semibold {
+		@apply !text-base !font-semibold;
+	}
+	.paragraph-bold {
+		@apply !text-base !font-bold;
+	}
+
+	/* Small - 14px */
+	.small-regular {
+		@apply !text-sm !font-normal;
+	}
+	.small-medium {
+		@apply !text-sm !font-medium;
+	}
+	.small-semibold {
+		@apply !text-sm !font-semibold;
+	}
+	.small-bold {
+		@apply !text-sm !font-bold;
+	}
+
+	/* Label - 12px */
+	.label-regular {
+		@apply !text-xs !font-normal;
+	}
+	.label-medium {
+		@apply !text-xs !font-medium;
+	}
+	.label-semibold {
+		@apply !text-xs !font-semibold;
+	}
+	.label-bold {
+		@apply !text-xs !font-bold;
+	}
+
+	/* Headings - Synced with Figma */
+	.heading-h1 {
+		@apply !text-5xl !font-semibold !text-neutral-950;
+		line-height: 100% !important;
+		letter-spacing: -0.01em !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	.heading-h2 {
+		@apply !text-h2 !font-semibold !text-neutral-900;
+		line-height: 100% !important;
+		letter-spacing: -0.01em !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	.heading-h3 {
+		@apply !text-2xl !font-semibold;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	.heading-h4 {
+		@apply !text-xl !font-semibold !text-neutral-900;
+		line-height: 120% !important;
+		letter-spacing: -0.02em !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+}

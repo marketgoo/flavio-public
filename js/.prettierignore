@@ -1,0 +1,21 @@
+# Dependencies
+node_modules
+vendor
+
+# Build output
+dist
+build
+.vite
+
+# WordPress specific
+*.php
+
+# Lock files
+package-lock.json
+composer.lock
+
+# Misc
+.git
+.DS_Store
+coverage
+

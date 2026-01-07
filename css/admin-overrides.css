@@ -1,0 +1,89 @@
+/**
+ * Flavio Plugin - WordPress Admin Overrides
+ * Only loaded on Flavio admin page
+ * 
+ * Uses CSS nesting (native, not preprocessor)
+ * Keeps WP sidebar but removes unnecessary spacing
+ */
+
+body.toplevel_page_flavio-page,
+body.admin_page_flavio-goal-profile {
+    /* Reset WordPress link styles for Radix portals (dropdowns, modals, etc.) */
+    [data-radix-popper-content-wrapper] a[href],
+    [data-radix-popper-content-wrapper] a[href]:visited {
+        color: inherit !important;
+        text-decoration: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    [data-radix-popper-content-wrapper] a[href]:hover,
+    [data-radix-popper-content-wrapper] a[href]:focus,
+    [data-radix-popper-content-wrapper] a[href]:active {
+        color: #147b14 !important; /* lime-700 */
+        text-decoration: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    /* Main wrapper styles */
+    & #wpwrap {
+        background: white;
+    }
+
+    /* Content area - remove WP margins but keep sidebar space */
+    & #wpcontent {
+        padding: 0 !important;
+        height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
+        overflow: auto;
+    }
+
+    & #wpbody {
+        padding: 0 !important;
+        height: 100%;
+        overflow: auto;
+    }
+
+    & #wpbody-content {
+        padding: 0 !important;
+        background: white;
+        height: 100%;
+        overflow: auto;
+    }
+
+    /* Hide WordPress footer */
+    & #wpfooter {
+        display: none !important;
+    }
+
+    /* Remove default .wrap margins */
+    & .wrap {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* React app container (main element) */
+    & #flavio {
+        height: 100%;
+        background: white;
+        overflow-y: auto;
+
+        /* Reset WordPress link styles */
+        & a,
+        & a:visited,
+        & a:hover,
+        & a:focus,
+        & a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+        }
+    }
+
+
+    /* Ensure sidebar remains visible and functional */
+    & #adminmenuwrap,
+    & #adminmenu {
+        display: block !important;
+    }
+}
+
