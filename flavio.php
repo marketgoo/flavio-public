@@ -13,7 +13,7 @@
  */
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 include_once 'vendor/autoload.php';
@@ -43,12 +43,12 @@ try {
     // Silently ignore env loading issues to avoid breaking the plugin in production
 }
 
-define('FLAVIO_LOGIN_URL', getenv('FLAVIO_LOGIN_URL'));
-define('FLAVIO_API_ENDPOINT', getenv('FLAVIO_API_ENDPOINT'));
-define('FLAVIO_SENTRY_DSN', getenv('FLAVIO_SENTRY_DSN'));
-define('FLAVIO_SENTRY_ENV', getenv('FLAVIO_SENTRY_ENV'));
-define('FLAVIO_POSTHOG_KEY', getenv('FLAVIO_POSTHOG_KEY'));
-define('FLAVIO_POSTHOG_HOST', getenv('FLAVIO_POSTHOG_HOST'));
+define('FLAVIO_LOGIN_URL', getenv('FLAVIO_LOGIN_URL') ?: 'https://flavio.marketgoo.com/login');
+define('FLAVIO_API_ENDPOINT', getenv('FLAVIO_API_ENDPOINT') ?: 'https://flavio.marketgoo.com/api');
+define('FLAVIO_SENTRY_DSN', getenv('FLAVIO_SENTRY_DSN') !== false ? getenv('FLAVIO_SENTRY_DSN') : 'https://e9d7881c297cf95f9ee9822bff251689@o16566.ingest.us.sentry.io/4510421050130432');
+define('FLAVIO_SENTRY_ENV', getenv('FLAVIO_SENTRY_ENV') ?: 'production');
+define('FLAVIO_POSTHOG_KEY', getenv('FLAVIO_POSTHOG_KEY') !== false ? getenv('FLAVIO_POSTHOG_KEY') : 'phc_LUwMXJe7IKUW3CewoLNmwBwGJHjgXjp8lixmvjO7GoU');
+define('FLAVIO_POSTHOG_HOST', getenv('FLAVIO_POSTHOG_HOST') ?: 'https://eu.i.posthog.com');
 
 // Sometimes we need the main plugin file for WP reasons.
 include_once('main.php');

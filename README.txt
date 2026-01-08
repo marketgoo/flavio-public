@@ -93,6 +93,10 @@ Please visit our website for current pricing information and available plans.
 
 For support, please visit the plugin support forum on WordPress.org or contact us through our website.
 
+= Where can I find the source code? =
+
+The source code is available at https://github.com/marketgoo/flavio-public
+
  == Screenshots ==
 1. Flavio admin dashboard overview.
 

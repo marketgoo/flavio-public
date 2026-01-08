@@ -69,14 +69,7 @@ class StructuredDataHome {
 	 */
 	public function activate_structured_data(WP_REST_Request $request): WP_REST_Response {
 		// Update option to activate structured data
-		$updated = update_option('flavio_structured_data_home_active', true);
-
-		if ($updated === false && get_option('flavio_structured_data_home_active') !== true) {
-			return new WP_REST_Response([
-				'success' => false,
-				'message' => 'Failed to activate structured data.'
-			], 500);
-		}
+		update_option('flavio_structured_data_home_active', true);
 
 		return new WP_REST_Response([
 			'success' => true,

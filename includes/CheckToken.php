@@ -33,17 +33,33 @@ class CheckToken
   /**
    * Constructor
    */
-  public function __construct() {}
+  public function __construct()
+  {
+    // Hook early to process token exchange before any output
+    add_action('admin_init', [$this, 'maybe_process_token_exchange']);
+  }
 
   /**
-   * Render the token check page and process token exchange
+   * Check if we should process token exchange and do it early (before any output)
+   */
+  public function maybe_process_token_exchange(): void
+  {
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- OAuth callback: uses signature validation, not nonce. See class docblock for security details.
+    $is_code_page = isset($_GET['page']) && $_GET['page'] === 'flavio-code-page';
+    $has_token = isset($_GET['token']) && isset($_GET['signature']);
+    // phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+    if ($is_code_page && $has_token) {
+      $this->process_token_exchange();
+    }
+  }
+
+  /**
+   * Render the token check page
    */
   public function render(): void
   {
-    // Process token exchange first (may redirect)
-    $this->process_token_exchange();
-
-    // Only render if we didn't redirect
+    // If we reach here, token exchange either failed or didn't happen
     print '<main id="flavio">
             <p class="flavio-loading">Validating session...</p>
         </main>';
