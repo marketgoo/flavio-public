@@ -42,8 +42,20 @@ class CheckToken
    */
   public function maybe_process_token_exchange(): void
   {
+    // Check if we have a nonce first
+    if (!isset($_GET['_wpnonce'])) {
+      return;
+    }
+
+    // Verify nonce before checking any other parameters
+    $nonce = sanitize_text_field(wp_unslash($_GET['_wpnonce']));
+    if (!wp_verify_nonce($nonce, 'flavio_oauth_callback')) {
+      return;
+    }
+
+    // Now it's safe to check other parameters after nonce verification
     $is_code_page = isset($_GET['page']) && $_GET['page'] === 'flavio-code-page';
-    $has_token = isset($_GET['token']) && isset($_GET['signature']) && isset($_GET['_wpnonce']);
+    $has_token = isset($_GET['token']) && isset($_GET['signature']);
 
     if ($is_code_page && $has_token) {
       $this->process_token_exchange();
@@ -65,23 +77,18 @@ class CheckToken
    * Process the token exchange flow
    *
    * Security layers:
-   * 1. Nonce verification - Validates the request originated from WordPress
+   * 1. Nonce verification - Already validated in maybe_process_token_exchange()
    * 2. Signature validation - URL signature must match stored signature
    * 3. One-time use - Signature is deleted after successful exchange
    * 4. Permission check - Page is only accessible to admins (manage_options)
    */
   private function process_token_exchange(): void
   {
-    // Verify WordPress nonce first (CSRF protection)
-    $nonce = isset($_GET['_wpnonce']) ? sanitize_text_field(wp_unslash($_GET['_wpnonce'])) : '';
-
-    if (empty($nonce) || !wp_verify_nonce($nonce, 'flavio_oauth_callback')) {
-      $this->render_error('Security verification failed. Please try again.');
-      return;
-    }
-
-    // Now safe to read other parameters after nonce verification
+    // Nonce already verified in maybe_process_token_exchange()
+    // Safe to read parameters
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     $signature = isset($_GET['signature']) ? sanitize_text_field(wp_unslash($_GET['signature'])) : '';
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     $temp_token = isset($_GET['token']) ? sanitize_text_field(wp_unslash($_GET['token'])) : '';
 
     // Validate required parameters

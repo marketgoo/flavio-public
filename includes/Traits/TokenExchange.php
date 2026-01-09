@@ -104,7 +104,8 @@ trait TokenExchange
       $parts = explode('.', $jwt);
 
       if (count($parts) !== 3) {
-        error_log('Flavio: Invalid JWT format'); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log -- Production logging for OAuth flow errors, not debug code.
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        error_log('Flavio: Invalid JWT format');
         return null;
       }
 
@@ -112,20 +113,23 @@ trait TokenExchange
       $payload = base64_decode(strtr($parts[1], '-_', '+/'));
 
       if (!$payload) {
-        error_log('Flavio: Failed to decode JWT payload'); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log -- Production logging for OAuth flow errors, not debug code.
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        error_log('Flavio: Failed to decode JWT payload');
         return null;
       }
 
       $data = json_decode($payload, true);
 
       if (!$data) {
-        error_log('Flavio: Failed to parse JWT payload JSON'); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log -- Production logging for OAuth flow errors, not debug code.
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        error_log('Flavio: Failed to parse JWT payload JSON');
         return null;
       }
 
       return $data;
     } catch (Exception $e) {
-      error_log('Flavio: Error parsing JWT: ' . $e->getMessage()); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log -- Production logging for OAuth flow errors, not debug code.
+      // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+      error_log('Flavio: Error parsing JWT: ' . $e->getMessage());
       return null;
     }
   }
