@@ -27,8 +27,7 @@ class NoIndex {
 		// Register filter if it has been activated before
 		if (get_option('flavio_noindex_filter_enabled', false)) {
 			add_filter('wp_robots', [$this, 'force_index_wp_robots'], 999);
-			add_action('wp_head', [$this, 'remove_noindex_from_header'], 1);
-			add_action('shutdown', [$this, 'close_output_buffer'], 999);
+			add_action('wp_head', [$this, 'remove_noindex_actions'], 1);
 		}
 	}
 
@@ -130,23 +129,26 @@ class NoIndex {
 	}
 
 	/**
-	 * Remove noindex meta tags from header for all pages.
+	 * Remove actions that add noindex meta tags and inject our own robots tag
 	 */
-	public function remove_noindex_from_header(): void {
-		ob_start(function($buffer) {
-			// Remove noindex meta tags
-			$buffer = preg_replace('/<meta\s+name=["\']robots["\']\s+content=["\'][^"\']*noindex[^"\']*["\']\s*\/?>/i', '', $buffer);
-			return $buffer;
-		});
+	public function remove_noindex_actions(): void {
+		// Remove WordPress core noindex action
+		remove_action('wp_head', 'wp_robots', 1);
+		remove_action('wp_head', 'noindex', 1);
+
+		// Remove common actions that might add noindex
+		remove_action('wp_head', 'wp_no_robots');
+
+		// Add our own robots meta tag that forces indexing
+		// This runs at priority 1 to ensure it's added early
+		add_action('wp_head', [$this, 'print_robots_meta_tag'], 1);
 	}
 
 	/**
-	 * Close the output buffer at the end of the request
+	 * Print a robots meta tag that forces indexing
 	 */
-	public function close_output_buffer(): void {
-		if (ob_get_level() > 0) {
-			ob_end_flush();
-		}
+	public function print_robots_meta_tag(): void {
+		echo '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />' . "\n";
 	}
 
 	/**

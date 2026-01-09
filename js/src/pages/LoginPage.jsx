@@ -30,10 +30,10 @@ const LoginPage = () => {
 		try {
 			const config = getWordPressConfig();
 
-			// 1. Generate signature from WordPress
+			// 1. Generate signature from WordPress (also returns callback nonce)
 			const data = await post(config.endpoints.signature);
 
-			if (!data.success || !data.signature) {
+			if (!data.success || !data.signature || !data.callback_nonce) {
 				throw new ApiError('Invalid signature response', 200, {
 					context: {
 						endpoint: 'signature',
@@ -42,15 +42,16 @@ const LoginPage = () => {
 				});
 			}
 
-			// 2. Get URLs from WordPress config (all pre-built in PHP)
-			const callbackUrl = config.tokenPageUrl;
+			// 2. Build callback URL with nonce for WordPress security verification
+			const callbackUrl = new URL(config.tokenPageUrl);
+			callbackUrl.searchParams.set('_wpnonce', data.callback_nonce);
 			const domain = window.location.hostname;
 
 			// 3. Construct Flavio login URL with all parameters
 			const params = new URLSearchParams({
 				from: 'wordpress_plugin',
 				signature: data.signature,
-				callback_url: callbackUrl,
+				callback_url: callbackUrl.toString(),
 				domain: domain,
 			});
 

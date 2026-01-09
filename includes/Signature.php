@@ -53,6 +53,8 @@ class Signature
     /**
      * Generate and store a random signature
      *
+     * Also generates a nonce for the OAuth callback verification.
+     *
      * @param WP_REST_Request $request
      * @return \WP_REST_Response
      */
@@ -65,9 +67,14 @@ class Signature
             // Store the signature in wp_options
             update_option('flavio_signature', $signature);
 
+            // Generate a nonce for the OAuth callback
+            // This nonce will be verified when the user returns from the external auth server
+            $callback_nonce = wp_create_nonce('flavio_oauth_callback');
+
             return new \WP_REST_Response([
                 'success' => true,
-                'signature' => $signature
+                'signature' => $signature,
+                'callback_nonce' => $callback_nonce
             ], 200);
         } catch (Exception $e) {
             return new \WP_REST_Response([

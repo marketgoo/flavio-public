@@ -146,14 +146,14 @@ class StructuredDataHome {
 		// Output Organization Schema
 		if (isset($structured_data['organization'])) {
 			echo '<script type="application/ld+json">' . "\n";
-			echo wp_json_encode($structured_data['organization'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+			echo wp_json_encode($structured_data['organization']);
 			echo "\n" . '</script>' . "\n";
 		}
 
 		// Output WebSite Schema
 		if (isset($structured_data['website'])) {
 			echo '<script type="application/ld+json">' . "\n";
-			echo wp_json_encode($structured_data['website'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+			echo wp_json_encode($structured_data['website']);
 			echo "\n" . '</script>' . "\n";
 		}
 	}

@@ -10,21 +10,19 @@ use Flavio\Traits\TokenExchange;
  * CheckToken class for handling OAuth2-like token exchange
  *
  * Flow:
- * 1. User arrives with a temporary token and signature in URL
- * 2. Validate signature against stored signature
- * 3. Exchange temporary token with external API for final JWT
- * 4. Store final JWT and metadata
- * 5. Redirect to main Flavio page
+ * 1. User arrives with a temporary token, signature, and nonce in URL
+ * 2. Validate WordPress nonce (CSRF protection)
+ * 3. Validate signature against stored signature
+ * 4. Exchange temporary token with external API for final JWT
+ * 5. Store final JWT and metadata
+ * 6. Redirect to main Flavio page
  *
- * Security Note:
- * This class intentionally does NOT use WordPress nonces because it handles
- * an external OAuth-like flow. Security is provided through:
+ * Security:
+ * - WordPress nonce verification (CSRF protection, validates request origin)
  * - Signature validation (comparing URL signature against stored signature)
  * - One-time use signature (deleted after successful token exchange)
  * - Admin-only access (only users with manage_options capability can reach this page)
  * - Token exchange with external API (temporary token is validated by external service)
- *
- * This is the standard security model for OAuth callback handlers.
  */
 class CheckToken
 {
@@ -44,10 +42,8 @@ class CheckToken
    */
   public function maybe_process_token_exchange(): void
   {
-    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- OAuth callback: uses signature validation, not nonce. See class docblock for security details.
     $is_code_page = isset($_GET['page']) && $_GET['page'] === 'flavio-code-page';
-    $has_token = isset($_GET['token']) && isset($_GET['signature']);
-    // phpcs:enable WordPress.Security.NonceVerification.Recommended
+    $has_token = isset($_GET['token']) && isset($_GET['signature']) && isset($_GET['_wpnonce']);
 
     if ($is_code_page && $has_token) {
       $this->process_token_exchange();
@@ -68,18 +64,25 @@ class CheckToken
   /**
    * Process the token exchange flow
    *
-   * Security: This method does NOT use nonce verification because it's an external
-   * OAuth-like callback. Instead, it uses:
-   * 1. Signature validation - URL signature must match stored signature
-   * 2. One-time use - Signature is deleted after successful exchange
-   * 3. Permission check - Page is only accessible to admins (manage_options)
+   * Security layers:
+   * 1. Nonce verification - Validates the request originated from WordPress
+   * 2. Signature validation - URL signature must match stored signature
+   * 3. One-time use - Signature is deleted after successful exchange
+   * 4. Permission check - Page is only accessible to admins (manage_options)
    */
   private function process_token_exchange(): void
   {
-    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- OAuth callback: uses signature validation, not nonce. See class docblock for security details.
+    // Verify WordPress nonce first (CSRF protection)
+    $nonce = isset($_GET['_wpnonce']) ? sanitize_text_field(wp_unslash($_GET['_wpnonce'])) : '';
+
+    if (empty($nonce) || !wp_verify_nonce($nonce, 'flavio_oauth_callback')) {
+      $this->render_error('Security verification failed. Please try again.');
+      return;
+    }
+
+    // Now safe to read other parameters after nonce verification
     $signature = isset($_GET['signature']) ? sanitize_text_field(wp_unslash($_GET['signature'])) : '';
     $temp_token = isset($_GET['token']) ? sanitize_text_field(wp_unslash($_GET['token'])) : '';
-    // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
     // Validate required parameters
     if (empty($signature) || empty($temp_token)) {
@@ -140,9 +143,9 @@ class CheckToken
 
     print '<div style="padding: 20px; text-align: center;">
 				<p style="color: #dc3545;">
-					Error: ' . $message . '
+					Error: ' . esc_html($message) . '
 				</p>
-					<a href="' . $flavio_url . '">Back to Flavio</a>
+					<a href="' . esc_url($flavio_url) . '">Back to Flavio</a>
 		   </div>';
   }
 }
