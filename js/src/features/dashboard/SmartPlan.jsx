@@ -20,11 +20,16 @@ import {
 } from '@/components/ui/empty';
 import { BrainCircuit, Clipboard, Loader2, AlertCircle } from 'lucide-react';
 import TaskCard from './TaskCard';
-import { getTaskEmoji, getTaskTags } from './config/taskDefinitions';
+import {
+	getTaskEmoji,
+	getTaskTags,
+	TASK_DEFINITIONS,
+} from './config/taskDefinitions';
 import GuidedTaskChat from '@/features/chat/GuidedTaskChat';
 import useSmartPlan from '@/hooks/useSmartPlan';
 import useScan, { SCAN_STATE } from '@/hooks/useScan';
 import useAnalytics from '@/hooks/analytics/useAnalytics';
+import { getWordPressConfig } from '@/api/client';
 
 /**
  * Skeleton for TaskCard loading state in carousel
@@ -70,12 +75,12 @@ const SmartPlanSkeleton = () => (
 const SmartPlanHeader = () => {
 	return (
 		<>
-			<div className="flex items-center gap-2 mb-3">
-				<BrainCircuit className="w-6 h-6 text-magenta-500" />
-				<h2 className="heading-h3">Next steps to grow</h2>
+			<div className="flex items-center gap-2">
+				<BrainCircuit className="w-8 h-8 text-magenta-500" />
+				<h2 className="heading-h2">Next steps to grow</h2>
 			</div>
 
-			<p className="paragraph-regular text-muted-foreground mb-6">
+			<p className="paragraph-regular text-neutral-700 mb-6 mt-1!">
 				Ready improvements I can apply for you, review or apply them
 				with one click.
 			</p>
@@ -95,6 +100,7 @@ const SmartPlanHeader = () => {
  */
 const SmartPlan = () => {
 	const { track, EVENTS } = useAnalytics();
+	const config = getWordPressConfig();
 
 	// Smart Plan hook - fetches tasks and manages state
 	const {
@@ -134,9 +140,26 @@ const SmartPlan = () => {
 	};
 
 	/**
-	 * Handle "View details" button - opens chat drawer
+	 * Handle "View details" button
+	 * - For tasks with viewType: 'page', navigates to dedicated page
+	 * - For other tasks, opens the chat drawer
 	 */
 	const handleAskFlavio = (task) => {
+		const taskDef = TASK_DEFINITIONS[task.type] || TASK_DEFINITIONS.default;
+
+		// Check if this task type should open a dedicated page
+		if (taskDef.viewType === 'page') {
+			// Store task data in window for the page to access
+			window.flavioData = window.flavioData || {};
+			window.flavioData.pageOptimizationTask = task;
+
+			// Navigate to the page optimization page
+			const pageUrl = `${config.adminPageUrl}&subpage=page-optimization&task_id=${task.id}`;
+			window.location.href = pageUrl;
+			return;
+		}
+
+		// Default: open drawer
 		setSelectedTask(task);
 		setIsDrawerOpen(true);
 	};
@@ -199,8 +222,8 @@ const SmartPlan = () => {
 		return (
 			<section>
 				<div className="flex items-center gap-2 mb-3">
-					<BrainCircuit className="w-6 h-6 text-magenta-500" />
-					<h2 className="heading-h3">Next steps to grow</h2>
+					<BrainCircuit className="w-8 h-8 text-magenta-500" />
+					<h2 className="heading-h2">Next steps to grow</h2>
 				</div>
 				<Empty>
 					<EmptyHeader>
@@ -266,12 +289,12 @@ const SmartPlan = () => {
 					<Carousel className="w-full">
 						<div className="flex items-center gap-4">
 							<CarouselPrevious className="static translate-y-0 shrink-0" />
-							<div className="flex-1 overflow-hidden">
+							<div className="flex-1 overflow-hidden rounded-lg">
 								<CarouselContent className="-ml-4">
 									{tasksWithData.map((task) => (
 										<CarouselItem
 											key={task.id}
-											className="pl-4"
+											className="pl-4 overflow-hidden rounded-lg"
 										>
 											<TaskCard
 												task={task}

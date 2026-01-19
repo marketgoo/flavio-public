@@ -3,6 +3,7 @@ import LoginPage from '@/pages/LoginPage';
 import OnboardingPage from '@/pages/OnboardingPage';
 import DashboardPage from '@/pages/DashboardPage';
 import GoalProfilePage from '@/pages/GoalProfilePage';
+import PageOptimizationPage from '@/pages/PageOptimizationPage';
 import Header from '@/components/layouts/Header';
 import TrialBanner from '@/components/layouts/TrialBanner';
 import { get, getWordPressConfig } from '@/api/client';
@@ -123,6 +124,16 @@ const App = () => {
 		return (
 			<Suspense fallback={null}>
 				<GoalProfilePage />
+				<DevTools />
+			</Suspense>
+		);
+	}
+
+	// Page Optimization page has its own layout
+	if (currentPage === 'page-optimization') {
+		return (
+			<Suspense fallback={null}>
+				<PageOptimizationPage />
 				<DevTools />
 			</Suspense>
 		);

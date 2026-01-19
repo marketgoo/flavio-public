@@ -44,7 +44,6 @@ const TagList = ({ tags = [] }) => {
 			{tags.map((tag) => (
 				<Badge
 					key={tag}
-					variant="outline"
 					className="bg-magenta-50 text-magenta-500 font-medium"
 				>
 					{tag}
@@ -133,7 +132,7 @@ const TaskCard = ({
 					All done! The task "{emoji} {title}" is successfully
 					completed.
 				</h4>
-				<p className="small-regular text-neutral-300">
+				<p className="paragraph-regular text-neutral-300">
 					Ready for more? Your next task is lined up.
 				</p>
 			</Card>
@@ -153,7 +152,7 @@ const TaskCard = ({
 					Oops! It looks like "{emoji} {title}" isn't fully set up
 					yet.
 				</h4>
-				<p className="small-regular text-neutral-300">
+				<p className="paragraph-regular text-neutral-300">
 					I'm here to guide you if you need help.
 				</p>
 			</Card>
@@ -169,12 +168,16 @@ const TaskCard = ({
 			</h4>
 
 			{/* Description */}
-			<div className="mt-2 flex-1">
+			<div className="mt-2 flex-1 paragraph-regular text-neutral-700 line-clamp-3">
 				<Markdown
-					className="small-regular text-neutral-700 line-clamp-3"
 					options={{
 						overrides: {
-							p: { props: { className: 'mb-0' } },
+							p: {
+								props: {
+									className:
+										'mb-0 paragraph-regular text-neutral-700 line-clamp-3',
+								},
+							},
 						},
 					}}
 				>

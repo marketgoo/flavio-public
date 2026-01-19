@@ -188,11 +188,11 @@ const ProgressReporting = ({
 	return (
 		<section className="mb-12">
 			<div className="flex items-center gap-2">
-				<Goal className="w-6 h-6 text-magenta-500" />
-				<h2 className="heading-h3">Goal update</h2>
+				<Goal className="w-8 h-8 text-magenta-500" />
+				<h2 className="heading-h2">Goal update</h2>
 			</div>
 
-			<p className="paragraph-regular text-muted-foreground mb-6">
+			<p className="paragraph-regular text-neutral-700 mb-6 mt-1!">
 				Track your goal here <strong>{selectedGoal}</strong> — key
 				metrics, progress, and quick wins as we go.
 			</p>
@@ -203,10 +203,7 @@ const ProgressReporting = ({
 			) : showMetrics ? (
 				<div className="bg-primary-foreground p-6 rounded-lg">
 					<ProgressBulletList items={reportingData} />
-					<StatusBanner
-						message={statusMessage}
-						updated={updated}
-					/>
+					<StatusBanner message={statusMessage} updated={updated} />
 				</div>
 			) : (
 				<ProgressReportingEmptyState

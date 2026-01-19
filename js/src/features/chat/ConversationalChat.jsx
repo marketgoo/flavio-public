@@ -18,6 +18,9 @@ import { TIMINGS } from '@/config/timings';
  * @param {string} [completionMessage='Done! Processing your responses...'] - Final message before completing
  * @param {number} [responseDelay=TIMINGS.CHAT.RESPONSE_DELAY] - Delay before showing acknowledgment (ms)
  * @param {number} [questionDelay=TIMINGS.CHAT.QUESTION_DELAY] - Delay before showing next question (ms)
+ * @param {string} [optionsVariant='default'] - Visual variant for options: 'default' | 'chips'
+ * @param {boolean} [showInputWithOptions=false] - Show text input alongside options (for hybrid input)
+ * @param {string} [inputPlaceholder='Write something...'] - Placeholder for the text input when shown with options
  *
  * @example
  * <ConversationalChat
@@ -27,6 +30,8 @@ import { TIMINGS } from '@/config/timings';
  *   ]}
  *   onComplete={(responses) => saveData(responses)}
  *   initialValues={{ userName: 'John' }}
+ *   optionsVariant="chips"
+ *   showInputWithOptions={true}
  * />
  */
 const ConversationalChat = ({
@@ -36,6 +41,9 @@ const ConversationalChat = ({
 	completionMessage = 'Done! Processing your responses...',
 	responseDelay = TIMINGS.CHAT.RESPONSE_DELAY,
 	questionDelay = TIMINGS.CHAT.QUESTION_DELAY,
+	optionsVariant = 'default',
+	showInputWithOptions = false,
+	inputPlaceholder = 'Write something...',
 }) => {
 	// Lazy initialization: Calculate initial state once without effects
 	const [initialState] = useState(() => {
@@ -337,21 +345,44 @@ const ConversationalChat = ({
 							index === messages.length - 1 ||
 							messages[index + 1].type !== message.type;
 
+						// Show chips after the last assistant message when using chips variant
+						const showChipsAfterMessage =
+							isLastMessage &&
+							message.type === 'assistant' &&
+							optionsVariant === 'chips' &&
+							isOptions &&
+							!isProcessing;
+
 						return (
-							<div
-								key={index}
-								className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} ${
-									isLastInGroup ? 'mb-3' : 'mb-1'
-								}`}
-							>
-								<ChatMessage
-									type={message.type}
-									content={message.content}
-									example={message.example}
-									action={message.action}
-									enableTypewriter={enableTypewriter}
-									isFirstInGroup={isFirstInGroup}
-								/>
+							<div key={index}>
+								<div
+									className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} ${
+										isLastInGroup && !showChipsAfterMessage
+											? 'mb-3'
+											: 'mb-1'
+									}`}
+								>
+									<ChatMessage
+										type={message.type}
+										content={message.content}
+										example={message.example}
+										action={message.action}
+										enableTypewriter={enableTypewriter}
+										isFirstInGroup={isFirstInGroup}
+									/>
+								</div>
+								{showChipsAfterMessage && (
+									<div className="mt-3 mb-3 ml-12">
+										<ChatOptions
+											options={
+												currentQuestionData.options
+											}
+											onSelect={handleOptionSelect}
+											disabled={isProcessing}
+											variant="chips"
+										/>
+									</div>
+								)}
 							</div>
 						);
 					})}
@@ -360,7 +391,7 @@ const ConversationalChat = ({
 			</div>
 
 			{/* Input area - inside chat container */}
-			<div className="p-4">
+			<div className="p-4 space-y-4">
 				{isTextInput && (
 					<ChatInput
 						value={currentInput}
@@ -371,13 +402,26 @@ const ConversationalChat = ({
 					/>
 				)}
 
-				{isOptions && (
+				{isOptions && optionsVariant !== 'chips' && (
 					<ChatOptions
 						options={currentQuestionData.options}
 						onSelect={handleOptionSelect}
 						disabled={isProcessing}
+						variant={optionsVariant}
 					/>
 				)}
+
+				{/* For chips variant or showInputWithOptions, always show input */}
+				{isOptions &&
+					(optionsVariant === 'chips' || showInputWithOptions) && (
+						<ChatInput
+							value={currentInput}
+							onChange={setCurrentInput}
+							onSend={handleTextSend}
+							placeholder={inputPlaceholder}
+							disabled={isProcessing}
+						/>
+					)}
 			</div>
 		</div>
 	);

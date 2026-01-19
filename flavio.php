@@ -13,7 +13,7 @@
  */
 
 if (!defined('ABSPATH')) {
-	exit;
+    exit;
 }
 
 include_once 'vendor/autoload.php';
@@ -71,6 +71,7 @@ use Flavio\Tasks\No404;
 use Flavio\Tasks\NoIndex;
 use Flavio\Tasks\FriendlyUrl;
 use Flavio\Tasks\StructuredDataHome;
+use Flavio\Tasks\PageOptimization;
 
 /**
  * Main plugin class
@@ -116,6 +117,7 @@ class Flavio
         new NoIndex();
         new FriendlyUrl();
         new StructuredDataHome();
+        new PageOptimization();
     }
 }
 

@@ -38,7 +38,6 @@ trait TokenExchange
         ['Authorization' => 'Token ' . $temp_token]
       );
 
-
       if (!isset($response->data['success']) || !$response->data['success']) {
         $message = $response->data['message'] ?? 'Token exchange failed';
         return [

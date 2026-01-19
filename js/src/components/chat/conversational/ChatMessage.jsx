@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CircleUserRound } from 'lucide-react';
+import Markdown from 'markdown-to-jsx';
 import { Button } from '@/components/ui/button';
 import TypewriterText from './TypewriterText';
 import { TIMINGS } from '@/config/timings';
@@ -14,9 +15,10 @@ import { getWordPressConfig } from '@/api/client';
  * action buttons for interactive messages.
  *
  * Uses Flavio mascot icon for assistant messages.
+ * Supports basic markdown: **bold** and newlines.
  *
  * @param {('assistant'|'user')} [type='assistant'] - Message sender type
- * @param {string} content - Main message text
+ * @param {string} content - Main message text (supports **bold** markdown)
  * @param {string} [example] - Optional example text (shown below main text in gray italic)
  * @param {Object} [action] - Optional action button configuration
  * @param {string} action.label - Button label
@@ -102,7 +104,7 @@ const ChatMessage = ({
 							</>
 						) : (
 							<>
-								<p className="small-regular leading-relaxed">
+								<div className="small-regular leading-relaxed">
 									{enableTypewriter ? (
 										<TypewriterText
 											text={content}
@@ -115,9 +117,9 @@ const ChatMessage = ({
 											}
 										/>
 									) : (
-										content
+										<Markdown>{content}</Markdown>
 									)}
-								</p>
+								</div>
 								{action && textComplete && (
 									<div className="mt-3">
 										<Button

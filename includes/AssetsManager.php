@@ -263,14 +263,27 @@ class AssetsManager
 	/**
 	 * Get current page identifier for React routing
 	 *
-	 * @return string Page identifier ('default', 'goal-profile', etc.)
+	 * @return string Page identifier ('default', 'goal-profile', 'page-optimization', etc.)
 	 */
 	private function get_current_page()
 	{
 		$screen = get_current_screen();
 
+		// Check for goal-profile page
 		if ($screen && $screen->id === 'admin_page_flavio-goal-profile') {
 			return 'goal-profile';
+		}
+
+		// Check for subpage parameter (used for SPA routing within main Flavio page)
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if (isset($_GET['subpage'])) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$subpage = sanitize_text_field(wp_unslash($_GET['subpage']));
+			$allowed_subpages = ['page-optimization'];
+
+			if (in_array($subpage, $allowed_subpages, true)) {
+				return $subpage;
+			}
 		}
 
 		return 'default';

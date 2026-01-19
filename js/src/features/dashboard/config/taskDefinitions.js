@@ -172,6 +172,22 @@ export const TASK_DEFINITIONS = {
 		actionType: 'apply',
 		apiEndpoint: '/tasks/contactpagegeodata',
 	},
+	pageoptimization: {
+		title: "I've reviewed this page and prepared improvements",
+		description:
+			'I checked your page and found opportunities to improve clarity, structure and visibility. Let me show you what I found.',
+		tags: [TASK_TAGS.VISIBILITY],
+		icon: 'FileEdit',
+		emoji: '✨',
+		actionType: 'apply',
+		apiEndpoint: '/tasks/page-optimization',
+		/**
+		 * Special task type that opens a dedicated page view instead of the lateral modal.
+		 * The detail view includes a conversational chat for topic selection and
+		 * editable proposed changes sections.
+		 */
+		viewType: 'page',
+	},
 
 	// =====================================================
 	// Tasks without automatic fix (manual/mark-done)
